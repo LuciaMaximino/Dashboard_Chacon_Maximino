@@ -1,0 +1,119 @@
+﻿/*elimina márgenes por defecto, usa la fuente Montserrat y ajusta el box-sizing*/
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Montserrat', sans-serif;
+}
+/*centra el contenido vertical y horizontalmente, con un fondo color beige claro*/
+body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background: #f2e5c9;
+}
+/*mitad izq*/
+.formulario {
+    flex: 1;
+    padding: 30px 40px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+    .formulario h1 {
+        text-align: center;
+        margin-bottom: 25px;
+        color: #333;
+    }
+/*imagen avatar login*/
+.avatar {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 15px;
+}
+    .avatar img {
+        width: 90px;
+        height: 90px;
+        border-radius: 50%;
+        object-fit: cover;
+    }
+
+.input-box {
+    position: relative;
+    margin: 25px 0;
+    border-bottom: 2px solid #adadad;
+}
+
+    .input-box input {
+        width: 100%;
+        padding: 10px 5px;
+        font-size: 16px;
+        border: none;
+        background: none;
+        outline: none;
+    }
+
+    .input-box label {
+        position: absolute;
+        top: 50%;
+        left: 5px;
+        transform: translateY(-50%);
+        color: #adadad;
+        font-size: 16px;
+        pointer-events: none;
+        transition: 0.3s ease;
+    }
+
+    /*efecto flotante*/
+    .input-box input:focus ~ label,
+    .input-box input:valid ~ label {
+        top: -5px;
+        color: #000000;
+        font-size: 13px;
+        font-weight: 600;
+    }
+
+.formulario input[type="submit"] {
+    width: 100%;
+    height: 45px;
+    border: none;
+    outline: none;
+    background: #9C5B33;
+    color: #F2E5C9;
+    font-size: 16px;
+    font-weight: 600;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background 0.3s ease;
+    margin-top: 10px;
+}
+    /*invierte los colores del boton cuando me posiciono con el mouse*/
+    .formulario input[type="submit"]:hover {
+        background: #F2E5C9; 
+        color: #9C5B33; 
+    }
+/*caja principal blanca con bordes redondeados, sombra y dos secciones*/
+.contenedor {
+    display: flex;
+    background: #fff;
+    border-radius: 15px;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+    overflow: hidden;
+    width: 800px;
+    height: 500px;
+}
+/*mitad der*/
+.logo-panel {
+    flex: 1;
+    background: #f9f5e9;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+    .logo-panel img {
+        width: 100%;
+        height: 120%;
+        object-fit: cover;
+    }
