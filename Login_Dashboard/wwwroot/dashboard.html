@@ -1,0 +1,32 @@
+﻿<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - Canales de Venta</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="dashboard.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <div class="header">
+        <h1>Dashboard - Shop de Artesanías</h1>
+        <div class="breadcrumb">
+            <span class="active" id="breadcrumb">Canales de Venta</span>
+        </div>
+    </div>
+
+    <div id="navigation" style="display: none;">
+        <button class="btn-back" onclick="goBack()">← Volver</button>
+        <button class="btn-home" onclick="goHome()"> Inicio</button>
+    </div>
+
+    <div class="content">
+        <div id="content-area">
+            <div class="loading">Cargando datos...</div>
+        </div>
+    </div>
+
+    <script src="dashboard.js"></script>
+</body>
+</html>
