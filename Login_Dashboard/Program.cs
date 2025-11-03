@@ -41,7 +41,7 @@ app.MapGet("/api/sales-channels", async () =>
 {
     using var connection = new SqlConnection(connectionString);
     await connection.OpenAsync();
-
+    //trae todos los canales de venta, les une las ventas y los productos vendidos y agrupa por cana ordenando de + a - por total de ventas
     string query = @"
         SELECT 
             cv.codigo_canal AS id,
@@ -57,7 +57,7 @@ app.MapGet("/api/sales-channels", async () =>
     using var command = new SqlCommand(query, connection);
     using var reader = await command.ExecuteReaderAsync();
 
-    var channels = new List<object>();
+    var channels = new List<object>(); //lista vacía donde se guardan todos los canales
     while (await reader.ReadAsync())
     {
         channels.Add(new
@@ -77,7 +77,7 @@ app.MapGet("/api/sales-channels/{channelId}/sales", async (string channelId) =>
 {
     using var connection = new SqlConnection(connectionString);
     await connection.OpenAsync();
-
+    //trae las ventas de un canal especifico, las une con los clientes para mostrar el nombre y suma el total de productos de cada venta
     string query = @"
         SELECT 
             v.numero_venta AS number,
@@ -115,7 +115,7 @@ app.MapGet("/api/sales/{saleNumber}/details", async (int saleNumber) =>
 {
     using var connection = new SqlConnection(connectionString);
     await connection.OpenAsync();
-
+    //trae todos los productos de una venta especifica y los ordena por item
     string query = @"
         SELECT 
             vp.item,
@@ -152,4 +152,4 @@ app.MapGet("/api/sales/{saleNumber}/details", async (int saleNumber) =>
 
 app.Run();
 
-public record LoginRequest(string Usuario, string Contrasena); //json del login
+public record LoginRequest(string Usuario, string Contrasena); //json del login

@@ -1,11 +1,11 @@
-﻿let currentLevel = 1;
-let selectedChannel = null;
-let selectedSale = null;
-let allChannelsData = [];
-let barChartInstance = null;
+﻿let currentLevel = 1; //guarda el nivel en el que estoy de drill down/drill up 
+let selectedChannel = null; //guarda el canal seleccionado
+let selectedSale = null; //guarda la venta seleccionada
+let allChannelsData = []; //guarda todos los datos de los canales
+let barChartInstance = null; //guardan los gráficos creados
 let pieChartInstance = null;
 
-window.onload = () => {
+window.onload = () => { //una vez que se cargo la pagina ejecuta la funcion
     loadLevel1();
 };
 
@@ -14,7 +14,7 @@ async function loadLevel1() {
     selectedChannel = null;
     selectedSale = null;
     updateBreadcrumb('Canales de Venta');
-    document.getElementById('navigation').style.display = 'none';
+    document.getElementById('navigation').style.display = 'none'; //oculta los botones de inicio y volver porque estoy en el nivel 1
 
     try {
         const response = await fetch('/api/sales-channels');
@@ -54,7 +54,7 @@ async function loadLevel1() {
         html += '</div>';
         document.getElementById('content-area').innerHTML = html;
 
-        // Esperar un momento antes de crear los gráficos
+        //esperar antes de crear los gráficos
         setTimeout(() => {
             createBarChart(channels);
             createPieChart(channels);
@@ -226,7 +226,7 @@ function updateBreadcrumb(text) {
 }
 
 function createBarChart(data) {
-    // Destruir gráfico anterior si existe
+    //si existe eliminar gráfico anterior
     if (barChartInstance) {
         barChartInstance.destroy();
     }
@@ -272,7 +272,7 @@ function createBarChart(data) {
 }
 
 function createPieChart(data) {
-    // Destruir gráfico anterior si existe
+    //si existe eliminar gráfico anterior 
     if (pieChartInstance) {
         pieChartInstance.destroy();
     }
@@ -309,7 +309,7 @@ function createPieChart(data) {
     });
 }
 
-// Función helper para escapar HTML y prevenir XSS
+//función helper para escapar HTML y prevenir XSS
 function escapeHtml(text) {
     const div = document.createElement('div');
     div.textContent = text;
