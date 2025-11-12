@@ -17,14 +17,116 @@
         </div>
     </div>
 
+    <!--muestra las 4 entidades-->
+    <div class="tabs-container">
+        <button class="tab active" onclick="showTab('channels')">
+            📊 Canales de Venta
+        </button>
+        <button class="tab" onclick="showTab('tab-products')">
+            📦 Productos
+        </button>
+        <button class="tab" onclick="showTab('customers')">
+            👥 Clientes
+        </button>
+        <button class="tab" onclick="showTab('categories')">
+            🏷 Categorías
+        </button>
+    </div>
+
     <div id="navigation" style="display: none;">
         <button class="btn-back" onclick="goBack()">← Volver</button>
-        <button class="btn-home" onclick="goHome()"> Inicio</button>
+        <button class="btn-home" onclick="goHome()">🏠 Inicio</button>
     </div>
 
     <div class="content">
         <div id="content-area">
             <div class="loading">Cargando datos...</div>
+        </div>
+    </div>
+
+    <!-- productos (semaforización) -->
+    <div id="tab-products" class="tab-content">
+        <div class="content">
+            <h2>Productos por Rendimiento</h2>
+            <p class="subtitle-section">Semaforización basada en cantidad de unidades vendidas</p>
+
+            <div class="semaphore-legend">
+                <div class="legend-item green">
+                    <div class="legend-circle"></div>
+                    <div>
+                        <strong>Alto Rendimiento</strong>
+                        <p>Más de 25 unidades vendidas</p>
+                    </div>
+                </div>
+                <div class="legend-item yellow">
+                    <div class="legend-circle"></div>
+                    <div>
+                        <strong>Rendimiento Medio</strong>
+                        <p>Entre 10 y 25 unidades vendidas</p>
+                    </div>
+                </div>
+                <div class="legend-item red">
+                    <div class="legend-circle"></div>
+                    <div>
+                        <strong>Bajo Rendimiento</strong>
+                        <p>Menos de 10 unidades vendidas</p>
+                    </div>
+                </div>
+            </div>
+
+            <div id="products-table">
+                <div class="loading">Cargando productos...</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- clientes -->
+    <div id="tab-customers" class="tab-content">
+        <div class="content">
+            <h2>Clientes por Provincia</h2>
+            <p class="subtitle-section">Distribución y métricas de clientes por ubicación</p>
+
+            <div class="charts-container" id="customers-charts">
+                <div class="chart-box">
+                    <canvas id="customersBarChart"></canvas>
+                </div>
+                <div class="chart-box">
+                    <canvas id="customersPieChart"></canvas>
+                </div>
+            </div>
+
+            <div id="customers-stats" class="stats-grid">
+                <!--se llena dinámicamente -->
+            </div>
+
+            <div id="customers-table">
+                <div class="loading">Cargando clientes...</div>
+            </div>
+        </div>
+    </div>
+
+    <!--categorías -->
+    <div id="tab-categories" class="tab-content">
+        <div class="content">
+            <h2>Categorías de Productos</h2>
+            <p class="subtitle-section">Análisis de ventas por categoría de productos</p>
+
+            <div class="charts-container" id="categories-charts">
+                <div class="chart-box">
+                    <canvas id="categoriesBarChart"></canvas>
+                </div>
+                <div class="chart-box">
+                    <canvas id="categoriesPieChart"></canvas>
+                </div>
+            </div>
+
+            <div id="categories-stats" class="stats-grid">
+                <!-- Se llenará dinámicamente -->
+            </div>
+
+            <div id="categories-table">
+                <div class="loading">Cargando categorías...</div>
+            </div>
         </div>
     </div>
 

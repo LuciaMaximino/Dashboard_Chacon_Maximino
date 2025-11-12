@@ -1,4 +1,5 @@
 using Microsoft.Data.SqlClient;
+using System;
 using System.Data;
 
 var builder = WebApplication.CreateBuilder(args); //prepara el servidor
@@ -110,7 +111,7 @@ app.MapGet("/api/sales-channels/{channelId}/sales", async (string channelId) =>
     return Results.Ok(sales);
 });
 
-// Nivel 3 - obtener detalle de una venta específica
+//nivel 3 - obtener detalle de una venta específica
 app.MapGet("/api/sales/{saleNumber}/details", async (int saleNumber) =>
 {
     using var connection = new SqlConnection(connectionString);
@@ -150,6 +151,121 @@ app.MapGet("/api/sales/{saleNumber}/details", async (int saleNumber) =>
     return Results.Ok(details);
 });
 
+//endpoint para obtener productos con la semaforización
+app.MapGet("/api/products", async () =>
+{
+    using var connection = new SqlConnection(connectionString);
+    await connection.OpenAsync();
+
+    string query = @"
+        SELECT 
+            p.codigo_producto AS code,
+            p.descripcion AS name,
+            cp.nombre AS category,
+            ISNULL(SUM(vp.cantidad), 0) AS sales,
+            ISNULL(SUM(vp.precio_total), 0) AS revenue,
+            CASE 
+                WHEN ISNULL(SUM(vp.cantidad), 0) >= 25 THEN 'high'
+                WHEN ISNULL(SUM(vp.cantidad), 0) >= 10 THEN 'medium'
+                ELSE 'low'
+            END AS status
+        FROM Productos p
+        INNER JOIN CategoriasProductos cp ON p.codigo_categoria = cp.codigo_categoria
+        LEFT JOIN VentasProductos vp ON p.codigo_producto = vp.codigo_producto
+        GROUP BY p.codigo_producto, p.descripcion, cp.nombre
+        ORDER BY sales DESC";
+
+    using var command = new SqlCommand(query, connection);
+    using var reader = await command.ExecuteReaderAsync();
+
+    var products = new List<object>();
+    while (await reader.ReadAsync())
+    {
+        products.Add(new
+        {
+            code = reader["code"].ToString(),
+            name = reader["name"].ToString(),
+            category = reader["category"].ToString(),
+            sales = Convert.ToInt32(reader["sales"]),
+            revenue = Convert.ToDecimal(reader["revenue"]),
+            status = reader["status"].ToString()
+        });
+    }
+
+    return Results.Ok(products);
+});
+
+//endpoint para obtener los clientes por provincia
+app.MapGet("/api/customers", async () =>
+{
+    using var connection = new SqlConnection(connectionString);
+    await connection.OpenAsync();
+
+    string query = @"
+        SELECT 
+            p.nombre AS province,
+            COUNT(DISTINCT c.codigo_cliente) AS customers,
+            COUNT(DISTINCT v.numero_venta) AS sales
+        FROM Provincias p
+        LEFT JOIN Clientes c ON p.codigo_provincia = c.codigo_provincia
+        LEFT JOIN Ventas v ON c.codigo_cliente = v.codigo_cliente
+        GROUP BY p.nombre
+        HAVING COUNT(DISTINCT c.codigo_cliente) > 0
+        ORDER BY customers DESC";
+
+    using var command = new SqlCommand(query, connection);
+    using var reader = await command.ExecuteReaderAsync();
+
+    var customers = new List<object>();
+    while (await reader.ReadAsync())
+    {
+        customers.Add(new
+        {
+            province = reader["province"].ToString(),
+            customers = Convert.ToInt32(reader["customers"]),
+            sales = Convert.ToInt32(reader["sales"])
+        });
+    }
+
+    return Results.Ok(customers);
+});
+
+//endpoint para obtener categorías de productos
+app.MapGet("/api/categories", async () =>
+{
+    using var connection = new SqlConnection(connectionString);
+    await connection.OpenAsync();
+
+    string query = @"
+        SELECT 
+            cp.nombre AS name,
+            COUNT(DISTINCT p.codigo_producto) AS products,
+            ISNULL(SUM(vp.cantidad), 0) AS sales,
+            ISNULL(SUM(vp.precio_total), 0) AS revenue
+        FROM CategoriasProductos cp
+        LEFT JOIN Productos p ON cp.codigo_categoria = p.codigo_categoria
+        LEFT JOIN VentasProductos vp ON p.codigo_producto = vp.codigo_producto
+        GROUP BY cp.nombre
+        ORDER BY revenue DESC";
+
+    using var command = new SqlCommand(query, connection);
+    using var reader = await command.ExecuteReaderAsync();
+
+    var categories = new List<object>();
+    while (await reader.ReadAsync())
+    {
+        categories.Add(new
+        {
+            name = reader["name"].ToString(),
+            products = Convert.ToInt32(reader["products"]),
+            sales = Convert.ToInt32(reader["sales"]),
+            revenue = Convert.ToDecimal(reader["revenue"])
+        });
+    }
+
+    return Results.Ok(categories);
+});
+
 app.Run();
 
-public record LoginRequest(string Usuario, string Contrasena); //json del login
+public record LoginRequest(string Usuario, string Contrasena); //json del login
